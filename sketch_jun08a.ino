@@ -75,7 +75,7 @@ void setup() {
   startCheck();
   //Serial.println("test1");
   
-  delay(3000); // delay for preperation after setup check
+  wait(3000); // delay for preperation after setup check
 }
 
 void loop() {
@@ -92,7 +92,7 @@ void loop() {
     if (vStop == 0)   break;
     backUp(3);
     turnRight(33);
-    delay(300);
+    wait(300);
     driveStraight(destDis); // out of end marker area
     vStop = 0;
   }
@@ -101,7 +101,7 @@ void loop() {
 
 void ReactObstacles()
 {
-  //delay(100);
+  //wait(100);
   if (getVoltage(A0) < 1 && getVoltage(A1) < 1)
   {
     backUp(3);
@@ -123,23 +123,23 @@ void ReactObstacles()
 
 void avoidObstacles()
 {
-  delay(200);
+  wait(200);
   backUp(3);
-  delay(500);
+  wait(500);
   turnLeft(12);
-  delay(500);
+  wait(500);
   simpleStraight(45);
-  delay(500);
+  wait(500);
   turnRight(13);
-  delay(500);
+  wait(500);
   simpleStraight(94);
-  delay(500);
+  wait(500);
   turnRight(13);
-  delay(500);
+  wait(500);
   simpleStraight(45);
-  delay(500);
+  wait(500);
   turnLeft(13);
-  delay(700);
+  wait(700);
   //  while (1){};
 }
 
@@ -159,7 +159,7 @@ void simpleStraight(long sS)
   rightSpeed = 157;
   while(1)
   {
-    delay(70);
+    wait(70);
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
     Serial.print("\nsimple forward: ");
@@ -318,12 +318,12 @@ void driveStraight(long i)
       }
 
       if (distance > i)   break;
-      //delay(200);
+      //wait(200);
   }
   //vStop = 0;
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  //delay(200);
+  //wait(200);
 } // end driveStraight
 
 
@@ -407,11 +407,11 @@ void backUp(long b)
       prevLeftEncoderCount = LeftEncoderCount;
       prevRightEncoderCount = RightEncoderCount;
       if (backDistance > b)   break;
-      //delay(200);
+      //wait(200);
   }
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  //delay(200);
+  //wait(200);
 } // end backUp()
 
 
@@ -436,12 +436,12 @@ void turnRight(float turnR)
       right_motor.run(RELEASE);
       break;
     }
-    delay(20);
+    wait(20);
   }
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  delay(200); // wait for vehicle to become stable
+  wait(200); // wait for vehicle to become stable
 } // end turnRight
 
 
@@ -464,12 +464,12 @@ void turnLeft(float turnL)
        right_motor.run(RELEASE);
       break;  
     }
-    delay(20);
+    wait(20);
   }
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  delay(200); // wait for vehicle to become stable
+  wait(200); // wait for vehicle to become stable
 } // end turnLeft
 
 
@@ -480,12 +480,12 @@ void startCheck()
   RightEncoderCount = 0;
   distance = 0;
   transItera = 0;
-  //delay(50);
+  //wait(50);
   Serial.println("initialising sensors...");
   Serial.print("checking IR obstacle sensor...");
   while(1){if (getVoltage(A0) < 1 && getVoltage(A1) < 1)   break;} // IR obstacle check
   Serial.println("\nDone");
-  delay(1000); // preperation before next sensor test
+  wait(1000); // preperation before next sensor test
   Serial.print("checking ultrasonic sensor...");
   unsigned long ultraCT = millis();
   unsigned long ultraInterval = 0;
@@ -498,7 +498,7 @@ void startCheck()
       ultraInterval = 0;
     }
     ultraInterval = millis() - ultraCT;
-    //delay(1000);
+    //wait(1000);
   } // ultrasonic check
   Serial.println("Done");
   Serial.print("checking IR reflective sensor...\n");
@@ -506,7 +506,7 @@ void startCheck()
   unsigned long refInterval = 0;
   while(1)
   {
-    //delay(1000);
+    //wait(1000);
     if (refInterval > 500)
     {
       int currRead = analogRead(A3);
@@ -556,7 +556,7 @@ void startCheck()
   unsigned long rightInterval = 0;
   while(1)
   {
-    //delay(1000);
+    //wait(1000);
     if (rightInterval > 500)
     {
       Serial.println(RightEncoderCount);
@@ -625,7 +625,7 @@ float ultraSonic()
   Serial.print("\ndistance(cm): ");
   Serial.println(ultraDist);
   
-  //delay(20);
+  //wait(20);
   return ultraDist;
 }
 
@@ -639,4 +639,10 @@ void countREncoder(){ // interrupt function for right encoder
 float getVoltage(int pin) {
   float voltage = 5.0 * analogRead(pin) / 1024;
   return voltage;
+}
+
+void wait(float w){
+  unsigned long prevTime = millis();
+  while (millis()- prevTime < w){}
+  return;
 }
