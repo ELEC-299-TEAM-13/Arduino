@@ -42,10 +42,6 @@ int refirFlag;
 
 int TicksPerRot = 20;
 
-PID DiffSpeed(&EncDelta, &OutDelta, &EncDeltaSet,Kp,Ki,Kd, DIRECT);  // set the PID controller, which will try to make EncDelta 
-                                                                     // be the same as by EncDeltaSet (i.e. zero) by setting a value
-                                                                     // OutDelta, which will be used to adjust the motor speed settings.
-                                                                     // This will be updated every 200 ms by default
 
 
 void setup() {
