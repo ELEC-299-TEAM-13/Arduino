@@ -1,0 +1,63 @@
+void tooFar(){
+  // Star Search
+  simpleStraight(10);
+  wait(100);
+  backUp(20);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  turnLeft(3);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  backUp(20);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  turnRight(7);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  backUp(20);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  turnRight(4);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  backUp(20);
+  wait(100);
+  simpleStraight(10);
+  wait(100);
+  turnLeft(7);
+
+ 
+  // Z Search
+  simpleStraight(25);
+  turnRight(7);
+  simpleStraight(25);
+  turnRight(7);
+  simpleStraight(10);
+  turnRight(7);
+  simpleStraight(50);
+  turnLeft(7);
+  simpleStraight(10);
+  turnLeft(7);
+  simpleStraight(50);
+  turnRight(7);
+  simpleStraight(10);
+  turnRight(7);
+  simpleStraight(50);
+  turnLeft(7);
+  simpleStraight(10);
+  turnLeft(7);
+  simpleStraight(50);
+  turnRight(7);
+  simpleStraight(10);
+  turnRight(7);
+  simpleStraight(25);
+  turnRight(7);
+  simpleStraight(25);
+  
+}
