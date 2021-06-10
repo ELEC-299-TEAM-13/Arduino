@@ -157,20 +157,16 @@ void simpleStraight(long sS)
   leftSpeed = 139;
   right_motor.setSpeed(157);
   rightSpeed = 157;
-  while(1)
+  while(distance < sS)
   {
     wait(70);
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
     Serial.print("\nsimple forward: ");
     Serial.print(distance);
-    if (distance > sS)   
-    {
-        left_motor.run(RELEASE);
-        right_motor.run(RELEASE);
-        break;
-    }
   }
+  left_motor.run(RELEASE);
+  right_motor.run(RELEASE);
 } // end simpleStraight
 
 
@@ -195,7 +191,7 @@ void driveStraight(long i)
   unsigned long refspeedAdjCount = millis();
   unsigned long refspeedAdjInterval = 0;
   
-  while (1)
+  while (distance < i)
   {
       leftInter = prevLeftEncoderCount - LeftEncoderCount;
       rightInter = prevRightEncoderCount - RightEncoderCount;
@@ -316,9 +312,6 @@ void driveStraight(long i)
           break;
         }
       }
-
-      if (distance > i)   break;
-      //wait(200);
   }
   //vStop = 0;
   left_motor.setSpeed(0);
@@ -340,7 +333,7 @@ void backUp(long b)
   right_motor.setSpeed(155);
   rightSpeed = 155;
   prevIR = refIR();
-  while (1)
+  while (backDistance < b)
   {
      
       leftInter = prevLeftEncoderCount - LeftEncoderCount;
@@ -406,8 +399,6 @@ void backUp(long b)
       Serial.print("\n");
       prevLeftEncoderCount = LeftEncoderCount;
       prevRightEncoderCount = RightEncoderCount;
-      if (backDistance > b)   break;
-      //wait(200);
   }
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -421,23 +412,20 @@ void turnRight(float turnR)
 {
   LeftEncoderCount = 0;
   RightEncoderCount = 0;
+  distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(BACKWARD);
   Serial.print("turn right");
   left_motor.setSpeed(145);
   right_motor.setSpeed(155);
-  while (1)
+  while (distance < turnR)
   {
-    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-    distance = (averagePulse / 40) * 3.14 * 6.5;
-    if (distance > turnR)
-    {
-      left_motor.run(RELEASE);
-      right_motor.run(RELEASE);
-      break;
-    }
     wait(20);
+    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+    distance = (averagePulse / 40) * 3.14 * 6.5;  
   }
+  left_motor.run(RELEASE);
+  right_motor.run(RELEASE);
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -449,23 +437,20 @@ void turnLeft(float turnL)
 {
   LeftEncoderCount = 0;
   RightEncoderCount = 0;
+  distance = 0;
   left_motor.run(BACKWARD);
   right_motor.run(FORWARD);
   Serial.print("turn left");
   left_motor.setSpeed(145);
   right_motor.setSpeed(155);
-  while (1)
+  while (distance < turnL)
   {
+    wait(20);
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
-    if (distance > turnL)
-    {
-       left_motor.run(RELEASE);
-       right_motor.run(RELEASE);
-      break;  
-    }
-    wait(20);
   }
+  left_motor.run(RELEASE);
+  right_motor.run(RELEASE);
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -613,12 +598,16 @@ float ultraSonic()
   for(ultraI = 0; ultraI < 5; ultraI ++)
   {
     digitalWrite(A4, LOW);
-    delayMicroseconds(10);
+    unsigned long startTime = micros();
+    while (micros()-startTime < 10){
+    }
     digitalWrite(A4, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(A4, LOW);
-    unsigned long duration = pulseIn(A5, HIGH);
+    startTime = micros();
+    while (micros()-startTime < 10){
+    }    digitalWrite(A4, LOW);
+    unsigned long duration = pulseIn(A5, HIGH, 3000);
     float ultraDist1 = (duration * 0.034) / 2;
+    if (duration == 0) ultraDist = 0.51;
     distSum += ultraDist1;
   }
   float ultraDist = distSum / 5;
