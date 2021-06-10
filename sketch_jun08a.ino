@@ -142,6 +142,8 @@ void avoidObstacles()
   delay(700);
   //  while (1){};
 }
+
+
 void simpleStraight(long sS)
 {
   LeftEncoderCount = 0;
@@ -169,7 +171,9 @@ void simpleStraight(long sS)
         break;
     }
   }
-}
+} // end simpleStraight
+
+
 void driveStraight(long i) 
 {
   LeftEncoderCount = 0;
@@ -320,60 +324,8 @@ void driveStraight(long i)
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
   //delay(200);
-}
+} // end driveStraight
 
-void turnRight(float turnR)
-{
-  LeftEncoderCount = 0;
-  RightEncoderCount = 0;
-  left_motor.run(FORWARD);
-  right_motor.run(BACKWARD);
-  Serial.print("turn right");
-  left_motor.setSpeed(145);
-  right_motor.setSpeed(155);
-  while (1)
-  {
-    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-    distance = (averagePulse / 40) * 3.14 * 6.5;
-    if (distance > turnR)
-    {
-      left_motor.run(RELEASE);
-      right_motor.run(RELEASE);
-      break;
-    }
-    delay(20);
-  }
-  Serial.print("\nEnd");
-  left_motor.setSpeed(0);
-  right_motor.setSpeed(0);
-  delay(200); // wait for vehicle to become stable
-}
-void turnLeft(float turnL)
-{
-  LeftEncoderCount = 0;
-  RightEncoderCount = 0;
-  left_motor.run(BACKWARD);
-  right_motor.run(FORWARD);
-  Serial.print("turn left");
-  left_motor.setSpeed(145);
-  right_motor.setSpeed(155);
-  while (1)
-  {
-    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-    distance = (averagePulse / 40) * 3.14 * 6.5;
-    if (distance > turnL)
-    {
-       left_motor.run(RELEASE);
-       right_motor.run(RELEASE);
-      break;  
-    }
-    delay(20);
-  }
-  Serial.print("\nEnd");
-  left_motor.setSpeed(0);
-  right_motor.setSpeed(0);
-  delay(200); // wait for vehicle to become stable
-}
 
 void backUp(long b)
 {
@@ -460,7 +412,67 @@ void backUp(long b)
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
   //delay(200);
-}
+} // end backUp()
+
+
+// TURNS
+
+void turnRight(float turnR)
+{
+  LeftEncoderCount = 0;
+  RightEncoderCount = 0;
+  left_motor.run(FORWARD);
+  right_motor.run(BACKWARD);
+  Serial.print("turn right");
+  left_motor.setSpeed(145);
+  right_motor.setSpeed(155);
+  while (1)
+  {
+    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+    distance = (averagePulse / 40) * 3.14 * 6.5;
+    if (distance > turnR)
+    {
+      left_motor.run(RELEASE);
+      right_motor.run(RELEASE);
+      break;
+    }
+    delay(20);
+  }
+  Serial.print("\nEnd");
+  left_motor.setSpeed(0);
+  right_motor.setSpeed(0);
+  delay(200); // wait for vehicle to become stable
+} // end turnRight
+
+
+void turnLeft(float turnL)
+{
+  LeftEncoderCount = 0;
+  RightEncoderCount = 0;
+  left_motor.run(BACKWARD);
+  right_motor.run(FORWARD);
+  Serial.print("turn left");
+  left_motor.setSpeed(145);
+  right_motor.setSpeed(155);
+  while (1)
+  {
+    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+    distance = (averagePulse / 40) * 3.14 * 6.5;
+    if (distance > turnL)
+    {
+       left_motor.run(RELEASE);
+       right_motor.run(RELEASE);
+      break;  
+    }
+    delay(20);
+  }
+  Serial.print("\nEnd");
+  left_motor.setSpeed(0);
+  right_motor.setSpeed(0);
+  delay(200); // wait for vehicle to become stable
+} // end turnLeft
+
+
 
 void startCheck()
 {
@@ -562,6 +574,11 @@ void startCheck()
   return;
     
 } // end startCheck
+
+
+
+// SENSORS
+
 
 
 int refIR()
