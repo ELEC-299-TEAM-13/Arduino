@@ -7,20 +7,10 @@
 AF_DCMotor left_motor(1, MOTOR12_1KHZ);  // left motor to M1 on motor control board
 AF_DCMotor right_motor(3, MOTOR34_1KHZ); // right motor to M3 on motor control board
 
-double Kp = 0.5, Ki = 0.5, Kd = 0.1; // starting PID controller settings
-// double Kp = 1, Ki = 0, Kd = 0; // PID controller settings using only immediate difference, similar to simple closed loop control
-
-
-double EncDelta=0;
-double OutDelta=-20.0;
-double EncDeltaSet=0;
-
 int LeftEncoderCount = 0;
 int RightEncoderCount = 0;
 int prevLeftEncoderCount = 0;
 int prevRightEncoderCount = 0;
-int leftInter;
-int rightInter;
 int countDiff = 0;
 int DelayTime = 200;
 int LPWM=255;
@@ -189,8 +179,6 @@ void driveStraight(long i)
   
   while (distance < i)
   {
-      leftInter = prevLeftEncoderCount - LeftEncoderCount;
-      rightInter = prevRightEncoderCount - RightEncoderCount;
       countDiff = LeftEncoderCount - RightEncoderCount;
       unsigned int input = (int) round (0.8 * countDiff);
 
@@ -332,11 +320,8 @@ void backUp(long b)
   while (backDistance < b)
   {
      
-      leftInter = prevLeftEncoderCount - LeftEncoderCount;
-      rightInter = prevRightEncoderCount - RightEncoderCount;
       countDiff = LeftEncoderCount - RightEncoderCount;
       int input = (int) round (0.2 * countDiff);
-
       
       if (LeftEncoderCount > RightEncoderCount)
       {
