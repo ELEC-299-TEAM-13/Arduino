@@ -462,55 +462,6 @@ void backUp(long b)
   //delay(200);
 }
 
-int refIR()
-{
-  
-  int refI = 0;
-  int refSum = 0;
-  int currRead1 = 0;
-  int cumTrans1 = 0;
-  int avgTrans1 = 0;
-  for(refI = 0; refI < 3; refI ++)
-  {
-    currRead1 = analogRead(A3);
-    cumTrans1 += currRead1;
-  }
-  avgTrans1 = cumTrans1 / 3;
-      currRead1 = analogRead(A3);
-      Serial.print("\nTCRT5000L: ");
-      //Serial.print(currRead);
-      //int cond = currRead - avgTrans;
-      //Serial.print("  avg: ");
-      Serial.println(avgTrans1);
-      //Serial.print("  A3 diff: ");
-      //Serial.print(cond)
-      return avgTrans1;
-}
-
-float ultraSonic()
-{
-  int ultraI = 0;
-  float distSum = 0;
-  for(ultraI = 0; ultraI < 5; ultraI ++)
-  {
-    digitalWrite(A4, LOW);
-    delayMicroseconds(10);
-    digitalWrite(A4, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(A4, LOW);
-    unsigned long duration = pulseIn(A5, HIGH);
-    float ultraDist1 = (duration * 0.034) / 2;
-    distSum += ultraDist1;
-  }
-  float ultraDist = distSum / 5;
-  Serial.print("\ndistance(cm): ");
-  Serial.println(ultraDist);
-  
-  //delay(20);
-  return ultraDist;
-}
-
-
 void startCheck()
 {
   LeftEncoderCount = 0;
@@ -610,6 +561,55 @@ void startCheck()
   Serial.println(" \nDone\nsystemcheck completed");
   return;
     
+} // end startCheck
+
+
+int refIR()
+{
+  
+  int refI = 0;
+  int refSum = 0;
+  int currRead1 = 0;
+  int cumTrans1 = 0;
+  int avgTrans1 = 0;
+  for(refI = 0; refI < 3; refI ++)
+  {
+    currRead1 = analogRead(A3);
+    cumTrans1 += currRead1;
+  }
+  avgTrans1 = cumTrans1 / 3;
+      currRead1 = analogRead(A3);
+      Serial.print("\nTCRT5000L: ");
+      //Serial.print(currRead);
+      //int cond = currRead - avgTrans;
+      //Serial.print("  avg: ");
+      Serial.println(avgTrans1);
+      //Serial.print("  A3 diff: ");
+      //Serial.print(cond)
+      return avgTrans1;
+}
+
+float ultraSonic()
+{
+  int ultraI = 0;
+  float distSum = 0;
+  for(ultraI = 0; ultraI < 5; ultraI ++)
+  {
+    digitalWrite(A4, LOW);
+    delayMicroseconds(10);
+    digitalWrite(A4, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(A4, LOW);
+    unsigned long duration = pulseIn(A5, HIGH);
+    float ultraDist1 = (duration * 0.034) / 2;
+    distSum += ultraDist1;
+  }
+  float ultraDist = distSum / 5;
+  Serial.print("\ndistance(cm): ");
+  Serial.println(ultraDist);
+  
+  //delay(20);
+  return ultraDist;
 }
 
 void countLEncoder(){ // interrupt function for left encoder
