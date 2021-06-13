@@ -1,0 +1,11 @@
+void goBack(destDist){
+  turnRight(turnA);
+  turnLeft(turnL);
+  if (width1 > width2) simpleStraight(width1);
+  else simpleStraight(width2);
+  turnRight(turnR);
+  driveStraight(destDis);
+  turnRight(turnR);
+  if (width1 > width2) simpleStraight(width1);
+  else simpleStraight(width2);
+}
