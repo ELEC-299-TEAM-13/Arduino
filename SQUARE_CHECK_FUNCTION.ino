@@ -24,8 +24,9 @@ float destDis;
 float distance;
 
 //Square_Check_Function specific variables
-int turnL = 13;
-int turnR = 12;
+int turnL = 13; //encoder count for left 90 degrees
+int turnR = 12; //encoder count for right 90 degrees
+int turnA = 25; //encoder count to turn right 180 degrees
 int angle = 0;
 int right = 90;
 int left = -90;
@@ -193,7 +194,7 @@ void turnAround(){
   {
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
-    if (distance > 25)    break;
+    if (distance > turnA)    break;
     delay(10);
   }
   Serial.print("\n TURNED AROUND");
