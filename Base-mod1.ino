@@ -127,11 +127,11 @@ void ReactObstacles()
 
 void avoidObstacles()
 {
-  delay(200);
+  wait(200);
   backUp(3);
-  delay(500);
+  wait(500);
   turnLeft(12); // facing left
-  delay(500);
+  wait(500);
   if (obst2Flag == 0) // -x travel
   {
     width1 = overcomeCheck() + 25;
@@ -142,9 +142,9 @@ void avoidObstacles()
   }
   simpleStraight(25);
   
-  delay(500);
+  wait(500);
   turnRight(13); // facing forward
-  delay(500);
+  waot(500);
   if (obst2Flag == 0) // +y travel
   {
     simpleStraight(15);
@@ -157,10 +157,10 @@ void avoidObstacles()
   }
   simpleStraight(25);
   
-  delay(500);
+  wait(500);
   // overcome the obstacle
   turnRight(13); // +x travel
-  delay(500);
+  wait(500);
   if (obst2Flag == 0)
   {
     simpleStraight(width1);
@@ -169,16 +169,16 @@ void avoidObstacles()
   {
     simpleStraight(width2);
   }
-  delay(500);
+  wait(500);
   turnLeft(13); // back to m line
-  delay(700);
+  wait(700);
   //  while (1){};
 }
 
 float overcomeCheck ()
 {
   int OCC = 10;
-  delay(500);
+  wait(500);
   simpleStraight(10);
   if (getVoltage(A0) < 1 || getVoltage(A1) < 1) // obstacle on the side
     {
@@ -664,18 +664,22 @@ int refIR()
       //Serial.print("  A3 diff: ");
       //Serial.print(cond)
       return avgTrans1;
-}
+} // end refIR
 
 float ultraSonic()
 {
   int ultraI = 0;
   float distSum = 0;
+  // tests the ultrasonic sensor 5 times, and averages the result to avoid noise
   for(ultraI = 0; ultraI < 5; ultraI ++)
   {
     digitalWrite(A4, LOW);
-    delayMicroseconds(10);
-    digitalWrite(A4, HIGH);
-    delayMicroseconds(10);
+    startTime = micros();
+    while (micros()-startTime < 10){
+    }    digitalWrite(A4, HIGH);
+    startTime = micros();
+    while (micros()-startTime < 10){
+    }
     digitalWrite(A4, LOW);
     unsigned long duration = pulseIn(A5, HIGH);
     float ultraDist1 = (duration * 0.034) / 2;
@@ -685,24 +689,25 @@ float ultraSonic()
   Serial.print("\ndistance(cm): ");
   Serial.println(ultraDist);
   
-  //delay(20);
   return ultraDist;
-}
+} // end ultraSonic
 
 void countLEncoder(){ // interrupt function for left encoder
     LeftEncoderCount++;
-}
+} //countLEncoder
 
 void countREncoder(){ // interrupt function for right encoder
       RightEncoderCount++;
-}
+} //end countREncoder
+
 float getVoltage(int pin) {
   float voltage = 5.0 * analogRead(pin) / 1024;
   return voltage;
-}
+} //end getVoltage
 
+// a function to pause the program while still being non-blocking
 void wait(float w){
   unsigned long prevTime = millis();
   while (millis()- prevTime < w){}
   return;
-}
+} //end wait
