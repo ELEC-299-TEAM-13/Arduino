@@ -1,17 +1,21 @@
+// DEFINE PINS
 #define LEncoderPin 3     
 #define REncoderPin 2
 
+// INCLUDED LIBRARIES
 #include <AFMotor.h>
 #include <PID_v2.h> 
 
+// DEFINING MOTORS
 AF_DCMotor left_motor(1, MOTOR12_1KHZ);  // left motor to M1 on motor control board
 AF_DCMotor right_motor(3, MOTOR34_1KHZ); // right motor to M3 on motor control board
 
-int LeftEncoderCount = 0;
-int RightEncoderCount = 0;
-int prevLeftEncoderCount = 0;
-int prevRightEncoderCount = 0;
-int countDiff = 0;
+// GLOBAL VARIABLES
+int LeftEncoderCount = 0;   // number of encoder counts for left wheel
+int RightEncoderCount = 0;  // number of encoder counts for right wheel
+int prevLeftEncoderCount = 0;   // I THINK THIS CAN BE REMOVED
+int prevRightEncoderCount = 0;  // I THINK THIS CAN BE REMOVED
+int countDiff = 0;  
 int DelayTime = 200;
 int LPWM=255;
 int RPWM=255;
@@ -109,7 +113,7 @@ void ReactObstacles()
 
 void avoidObstacles()
 {
-  wait(200);
+  wait(DelayTime);
   backUp(3);
   wait(500);
   turnLeft(12);
@@ -180,7 +184,7 @@ void driveStraight(long i)
   while (distance < i)
   {
       countDiff = LeftEncoderCount - RightEncoderCount;
-      unsigned int input = (int) round (0.8 * countDiff);
+      // unsigned int input = (int) round (0.8 * countDiff); *CAN BE REMOVED*
 
       speedAdjInterval = millis() - speedAdjCount;
       if (speedAdjInterval > 50)
@@ -300,7 +304,7 @@ void driveStraight(long i)
   //vStop = 0;
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  //wait(200);
+  wait(DelayTime);
 } // end driveStraight
 
 
@@ -310,6 +314,7 @@ void backUp(long b)
   RightEncoderCount = 0;
   prevLeftEncoderCount = 0;
   prevRightEncoderCount = 0;
+  float backDistance = 0;
   left_motor.run(BACKWARD);
   right_motor.run(BACKWARD);
   left_motor.setSpeed(145);
@@ -321,7 +326,7 @@ void backUp(long b)
   {
      
       countDiff = LeftEncoderCount - RightEncoderCount;
-      int input = (int) round (0.2 * countDiff);
+      //int input = (int) round (0.2 * countDiff);  *CAN BE REMOVED*
       
       if (LeftEncoderCount > RightEncoderCount)
       {
@@ -367,7 +372,7 @@ void backUp(long b)
       Serial.print(rightSpeed);
        
       averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-      float backDistance = (averagePulse / 40) * 3.14 * 6.5;
+      backDistance = (averagePulse / 40) * 3.14 * 6.5;
       Serial.print("\nLEncoder: ");
       Serial.print(LeftEncoderCount);
       Serial.print(", REncoder: ");
@@ -383,7 +388,7 @@ void backUp(long b)
   }
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  //wait(200);
+  wait(DelayTime);
 } // end backUp()
 
 
@@ -410,7 +415,7 @@ void turnRight(float turnR)
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  wait(200); // wait for vehicle to become stable
+  wait(DelayTime); // wait for vehicle to become stable
 } // end turnRight
 
 
@@ -435,7 +440,7 @@ void turnLeft(float turnL)
   Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  wait(200); // wait for vehicle to become stable
+  wait(DelayTime); // wait for vehicle to become stable
 } // end turnLeft
 
 
@@ -588,7 +593,7 @@ float ultraSonic()
     }    digitalWrite(A4, LOW);
     unsigned long duration = pulseIn(A5, HIGH, 3000);
     float ultraDist1 = (duration * 0.034) / 2;
-    if (duration == 0) ultraDist = 0.51;
+    if (duration == 0) ultraDist1 = 0.51;
     distSum += ultraDist1;
   }
   float ultraDist = distSum / 5;
