@@ -144,7 +144,7 @@ void avoidObstacles()
   
   wait(500);
   turnRight(13); // facing forward
-  waot(500);
+  wait(500);
   if (obst2Flag == 0) // +y travel
   {
     simpleStraight(15);
