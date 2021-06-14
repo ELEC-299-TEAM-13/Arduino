@@ -678,7 +678,7 @@ int reactObstacles(){
     int angle = 90;
   }
   else{
-    turnLeft(turnL);
+    turnRight(turnR);
     int angle = 270;
   }
   
