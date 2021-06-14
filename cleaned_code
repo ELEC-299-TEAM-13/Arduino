@@ -98,7 +98,7 @@ void loop() {
     }
     
     backUp(3);
-    turnRight(33);
+    turnRight(turnA);
     wait(300);
     while(1){};
     driveStraight(destDis); // out of end marker area
@@ -358,7 +358,7 @@ float driveStraight(long i)
           avgTrans = 0;
           vStop = 0;
           refirFlag = 0;
-          //turnRight(33);
+          //turnRight(turnA);
           break;
         }
       }
