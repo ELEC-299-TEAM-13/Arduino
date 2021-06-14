@@ -669,8 +669,14 @@ int reactObstacles(){
   int distX = 0;
   int distY = 0;
    
-  turnLeft(turnL);
-  int angle = 90;
+  if (getVoltage(A0) > 1){
+    turnLeft(turnL);
+    int angle = 90;
+  }
+  else{
+    turnLeft(turnL);
+    int angle = 270;
+  }
   
   do{
 
@@ -727,7 +733,7 @@ int reactObstacles(){
     // keeps the angle between 0 and 360 degrees
     if (angle == 360) angle = 0;
 
-    if (distX > maxWidth) maxWidth = distX;
+    if (abs(distX) > maxWidth) maxWidth = distX;
         
   }while (distX != 0);  // continue loop until car has returned to original path
 
