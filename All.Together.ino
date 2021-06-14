@@ -967,13 +967,20 @@ void reposition(){
 
 //function to return to starting location
 void goBack(int destDist){
-  turnRight(turnA);
-  turnLeft(turnL);
-  if (width1 > width2) simpleStraight(width1);
-  else simpleStraight(width2);
-  turnRight(turnR);
-  driveStraight(destDis);
-  turnRight(turnR);
-  if (width1 > width2) simpleStraight(width1);
-  else simpleStraight(width2);
+  if (maxWidth > 0){
+    turnRight(turnR);
+    simpleStraight(abs(maxWidth));
+    turnLeft(turnL);
+    driveStraight(destDis);
+    turnLeft(turnL);
+    simpleStraight(abs(maxWidth));
+  }
+  else {
+    turnLeft(turnL);
+    simpleStraight(abs(maxWidth));
+    turnRight(turnR);
+    driveStraight(destDis);
+    turnRight(turnR);
+    simpleStraight(abs(maxWidth));
+  }
 } // end of goBack() function 
