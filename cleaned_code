@@ -94,7 +94,7 @@ void loop() {
     }
     else // only obst 1 engaged
     {
-      destination = destination - obst2;
+      destination = destination - obst1; //changed from obst2
     }
     
     backUp(3);
