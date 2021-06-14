@@ -96,6 +96,7 @@ void loop() {
     destination = 0;
     destination = driveStraight(destDis); // forward to marker
     //if (vStop == 0)   break; // bottom marker detected
+    while(1){};
     if (obst2Flag = 1) // obst 2 engaged
     {
       destination = (destination - obst1 - obst2);
@@ -193,7 +194,9 @@ float driveStraight(long i)
   rightSpeed = 155;
   prevIR = refIR();
   refirFlag = 0;
-
+  
+  int totalDistance = 0;
+  
   float dist;
   unsigned long speedAdjCount = millis();
   unsigned long speedAdjInterval = 0;
@@ -291,7 +294,7 @@ float driveStraight(long i)
         left_motor.run(RELEASE);
         right_motor.run(RELEASE);
         float distanceTemp = distance;
-
+        //
         if (obst1Flag == 1) // obst 1 has been engaged
         {
           obst2Flag = 1; // now engaging obst 2
@@ -306,8 +309,8 @@ float driveStraight(long i)
           obst1 = distanceTemp; // engaging obst 1 if all values are unused
         }
         obst1Flag = 1; // engaing obst 1
-        
-        avoidObstacles();
+        //
+        int distY = reactObstacles(); // modified from avoidObstacles, distY distance along Y
         left_motor.run(RELEASE);
         right_motor.run(RELEASE);
         //vStop = 0;
@@ -318,7 +321,7 @@ float driveStraight(long i)
         leftSpeed = 141;
         right_motor.setSpeed(rightSpeedSet);
         rightSpeed = rightSpeedSet;
-        distance = distanceTemp;
+        totalDistance += distanceTemp + distY; // summing up 
         distanceTemp = 0;
         LeftEncoderCount = 0;
         RightEncoderCount = 0;
@@ -344,7 +347,8 @@ float driveStraight(long i)
         }
       }
   }
-  return distance;
+  totalDistance += distance; // summing up the last distance traveled
+  return totalDistance;
   //vStop = 0;
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -967,20 +971,13 @@ void reposition(){
 
 //function to return to starting location
 void goBack(int destDist){
-  if (maxWidth > 0){
-    turnRight(turnR);
-    simpleStraight(abs(maxWidth));
-    turnLeft(turnL);
-    driveStraight(destDis);
-    turnLeft(turnL);
-    simpleStraight(abs(maxWidth));
-  }
-  else {
-    turnLeft(turnL);
-    simpleStraight(abs(maxWidth));
-    turnRight(turnR);
-    driveStraight(destDis);
-    turnRight(turnR);
-    simpleStraight(abs(maxWidth));
-  }
+  turnRight(turnA);
+  turnLeft(turnL);
+  if (width1 > width2) simpleStraight(width1);
+  else simpleStraight(width2);
+  turnRight(turnR);
+  driveStraight(destDis);
+  turnRight(turnR);
+  if (width1 > width2) simpleStraight(width1);
+  else simpleStraight(width2);
 } // end of goBack() function 
