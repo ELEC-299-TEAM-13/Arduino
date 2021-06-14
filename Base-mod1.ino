@@ -90,7 +90,7 @@ void loop() {
     }
     else // only obst 1 engaged
     {
-      destination = destination - obst2;
+      destination = destination - obst1;  //
     }
     
     backUp(3);
