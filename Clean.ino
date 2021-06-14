@@ -688,72 +688,72 @@ int reactObstacles(){
   int distX = 0;
   int distY = 0;
   
-  turnRight(turnR);
-  int angle = 90;
+  turnLeft(turnL);
+  int angle1 = 90;
   
   do{
 
     // if facing right, travel along the side of the obstacle
-    if (angle == 90){
+    if (angle1 == 90){
       distX += getWidth(0);
       //if possible, turn left, if not, turn right.
       if (ultraSonic() > 10){
-        turnLeft(turnL);
-        angle -= 90;
+        turnRight(turnR);
+        angle1 -= 90;
       }
       else {
-        turnRight(turnR);
-        angle += 90;
+        turnLeft(turnL);
+        angle1 += 90;
       }
     }
-    else if (angle == 270){
+    else if (angle1 == 270){
       distX -= getWidth(distX);
       //if possible, turn left, if not, turn right.
       if (ultraSonic() > 10){
-        turnRight(turnR);
-        angle += 90;
+        turnLeft(turnL);
+        angle1 += 90;
       }
       else {
-        turnLeft(turnL);
-        angle -= 90;
+        turnRight(turnR);
+        angle1 -= 90;
       }
     }
-    else if (angle == 180){
+    else if (angle1 == 180){
       distY -= getWidth(0);
       //if possible, turn left, if not, turn right.
       if (ultraSonic() > 10){
-        turnLeft(turnL);
-        angle -= 90;
+        turnRight(turnR);
+        angle1 -= 90;
       }
       else {
-        turnRight(turnR);
-        angle += 90;
+        turnLeft(turnL);
+        angle1 += 90;
       }
     }
     else{
       distY += getWidth(0);
       //if possible, turn left, if not, turn right.
       if (ultraSonic() > 10){
-        turnLeft(turnL);
-        angle -= 90;
+        turnRight(turnR);
+        angle1 -= 90;
       }
       else {
-        turnRight(turnR);
-        angle += 90;
+        turnLeft(turnL);
+        angle1 += 90;
       }
     }
 
     // keeps the angle between 0 and 360 degrees
-    if (angle == 360) angle = 0;
+    if (angle1 == 360) angle1 = 0;
 
     if (distX > maxWidth) maxWidth = distX;
         
   }while (distX != 0);  // continue loop until car has returned to original path
 
   // face car back to original direction
-  if (angle == 90) turnLeft(turnL);
-  else if (angle == 180) turnRight(turnA);
-  else if (angle == 270) turnRight(turnR);
+  if (angle1 == 90) turnRight(turnR);
+  else if (angle1 == 180) turnRight(turnA);
+  else if (angle1 == 270) turnLeft(turnL);
 
   return distY;
 }
