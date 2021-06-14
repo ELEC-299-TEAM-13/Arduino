@@ -674,7 +674,7 @@ float ultraSonic()
   for(ultraI = 0; ultraI < 5; ultraI ++)
   {
     digitalWrite(A4, LOW);
-    startTime = micros();
+    unsigned long startTime = micros();
     while (micros()-startTime < 10){
     }    digitalWrite(A4, HIGH);
     startTime = micros();
