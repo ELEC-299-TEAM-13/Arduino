@@ -667,7 +667,7 @@ void startCheck()
   //wait(50);
   Serial.println("initialising sensors...");
   Serial.print("checking IR obstacle sensor...");
-  while(1){if (getVoltage(A0) < 1 && getVoltage(A1) < 1)   break;} // IR obstacle check
+  while(getVoltage(A0) > 1 && getVoltage(A1) > 1){} // IR obstacle check
   Serial.println("\nDone");
   wait(1000); // preperation before next sensor test
   Serial.print("checking ultrasonic sensor...");
