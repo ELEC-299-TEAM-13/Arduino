@@ -7,6 +7,7 @@ float obst2;		//distance between obstacle 1/2
 float destination;	//distance from obstacle 1/2 to destination or full distance
 int obst1Flag; 		//1 for engaged obst 1
 int obst2Flag; 		//1 for engaged obst 2
+int rightFlag;    //1 for special right turn
 
 
 	float stepAside;	// the distance vehicle step aside before straveling back
@@ -37,5 +38,42 @@ int obst2Flag; 		//1 for engaged obst 2
 	{
 		stepAside = 0;
 		backward = destination;
+	}
+	
+	if (rightFlag == 1)
+	{
+		simpleStraight(3);
+		wait(300);
+		turnLeft(13);
+		wait(300);
+		simpleStraight(stepAside);
+		wait(300);
+		turnRight(13);
+		wait(300);
+		simpleStraight(backward);
+		wait(300);
+		turnRight(13);
+		wait(300);
+		turnLeft(13);
+		wait(300);
+		simpleStraight(3);
+	}
+	else
+	{
+		simpleStraight(3);
+		wait(300);
+		turnRight(13);
+		wait(300);
+		simpleStraight(stepAside);
+		wait(300);
+		turnLeft(13);
+		wait(300);
+		simpleStraight(backward);
+		wait(300);
+		turnLeft(13);
+		wait(300);
+		turnRight(13);
+		wait(300);
+		simpleStraight(3);
 	}
 	
