@@ -11,9 +11,8 @@ volatile int RightEncoderCount = 0;
 int countDiff = 0;
 int waitTime = 200;
 
-int leftSpeed = 141;
+int leftSpeed = 133;
 int rightSpeed = 155;
-int rightSpeed;
 float averagePulse;
 float destDis;
 float distance;
@@ -39,6 +38,11 @@ float destination;  //distance from obstacle 1/2 to destination
 int obst1Flag;    //1 for engaged obst 1
 int obst2Flag;    //1 for engaged obst 2
 int rightFlag;    //1 for special right turn
+int sideLength;
+int halfLength;
+int angle;
+int right = 90;
+int left = -90;
 
 int TicksPerRot = 20;
 
@@ -341,8 +345,6 @@ float simpleStraight(long sS)
 {
   LeftEncoderCount = 0;
   RightEncoderCount = 0;
-  prevLeftEncoderCount = 0;
-  prevRightEncoderCount = 0;
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(FORWARD);
@@ -369,8 +371,6 @@ float driveStraight(long i)
 {
   LeftEncoderCount = 0;
   RightEncoderCount = 0;
-  prevLeftEncoderCount = 0;
-  prevRightEncoderCount = 0;
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(FORWARD);
@@ -458,9 +458,6 @@ float driveStraight(long i)
         speedAdjCount = millis();
         speedAdjInterval = 0;
       }
-      
-      prevLeftEncoderCount = LeftEncoderCount;
-      prevRightEncoderCount = RightEncoderCount;
 
       dist = ultraSonic();
       if (dist < 7)   // getVoltage(A0) < 1 || getVoltage(A1) < 1 
@@ -534,9 +531,7 @@ float driveStraight(long i)
 void backUp(long b)
 {
   LeftEncoderCount = 0;
-  RightEncoderCount = 0;
-  prevLeftEncoderCount = 0;
-  prevRightEncoderCount = 0;
+  RightEncoderCount = 0;  
   left_motor.run(BACKWARD);
   right_motor.run(BACKWARD);
   left_motor.setSpeed(leftSpeed);
@@ -603,8 +598,6 @@ void backUp(long b)
       Serial.print("\ndistance traveled back: ");
       Serial.print(backDistance);
       Serial.print("\n");
-      prevLeftEncoderCount = LeftEncoderCount;
-      prevRightEncoderCount = RightEncoderCount;
   }
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -996,5 +989,3 @@ void wait(float w){
   while (millis()- prevTime < w){}
   return;
 }
-
-
