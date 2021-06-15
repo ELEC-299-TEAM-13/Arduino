@@ -12,7 +12,7 @@ int RightEncoderCount = 0;
 int prevLeftEncoderCount = 0;
 int prevRightEncoderCount = 0;
 int countDiff = 0;
-int DelayTime = 200;
+int waitTime = 200;
 int LPWM=255;
 int RPWM=255;
 
@@ -38,6 +38,7 @@ float obst2;    //distance between obstacle 1/2
 float destination;  //distance from obstacle 1/2 to destination
 int obst1Flag;    //1 for engaged obst 1
 int obst2Flag;    //1 for engaged obst 2
+int rightFlag;    //1 for special right turn
 
 int TicksPerRot = 20;
 
@@ -68,7 +69,7 @@ void setup() {
   //startCheck();
   //Serial.println("test1");
   
-  wait(3000); // delay for preperation after setup check
+  wait(3000); // wait for preperation after setup check
 }
 
 void loop() {
@@ -90,19 +91,89 @@ void loop() {
     }
     else // only obst 1 engaged
     {
-      destination = destination - obst1;  //
+      destination = destination - obst1; // modify 4:34/6/14
     }
     
     backUp(3);
+    wait(300);
     turnRight(33);
     wait(300);
-    while(1){};
-    driveStraight(destDis); // out of end marker area
+    //while(1){};
+      float stepAside;  // the distance vehicle step aside before straveling back
+  float backward;   // distance need to travel back
+  
+  if (obst1Flag != 0) // obs1 presented
+  {
+    if (obst2Flag != 0) // obst2 presented
+    {
+      if (width1 > width2)  // obst1 wilder
+      {
+        stepAside = width1;
+        backward = destination + obst2 + obst1 + depth1 + depth2;
+      }
+      else          // obst2 wilder
+      {
+        stepAside = width2;
+        backward = destination + obst2 + obst1 + depth1 + depth2;
+      }
+    }
+    else  // only obst1 presented
+    {
+      stepAside = width1;
+      backward = destination + obst1 + depth1;
+    }
+  }
+  else  // not obstacle presented
+  {
+    stepAside = 0;
+    backward = destination;
+  }
+  
+  if (rightFlag == 1)
+  {
+    simpleStraight(3);
+    wait(300);
+    turnLeft(13);
+    wait(300);
+    simpleStraight(stepAside);
+    wait(300);
+    turnRight(13);
+    wait(300);
+    simpleStraight(backward);
+    wait(300);
+    turnRight(13);
+    wait(300);
+    simpleStraight(stepAside);
+    wait(300);
+    turnLeft(13);
+    wait(300);
+    simpleStraight(3);
+  }
+  else
+  {
+    simpleStraight(3);
+    wait(300);
+    turnRight(13);
+    wait(300);
+    simpleStraight(stepAside);
+    wait(300);
+    turnLeft(13);
+    wait(300);
+    simpleStraight(backward);
+    wait(300);
+    turnLeft(13);
+    wait(300);
+    simpleStraight(stepAside);
+    wait(300);
+    turnRight(13);
+    wait(300);
+    simpleStraight(3);
+  }
     vStop = 0;
   }
   while (1){};
 }
-
+/*
 void ReactObstacles()
 {
   //wait(100);
@@ -124,55 +195,133 @@ void ReactObstacles()
   }
   return;
 }
-
+*/
 void avoidObstacles()
 {
   wait(200);
   backUp(3);
   wait(500);
-  turnLeft(12); // facing left
+  turnLeft(13); // facing left
   wait(500);
-  if (obst2Flag == 0) // -x travel
+  if (ultraSonic() < 20)// obstacle on the left side blocking the left turn
   {
-    width1 = overcomeCheck() + 25;
+    turnRight(33);  // facing to right
+      if (obst2Flag == 0) // +x travel
+      {
+        width1 = overcomeCheck() + 25;  // forward 25 for fully passing (vehicle body length)
+      }
+      else // now on obst 2
+      {
+        width2 = overcomeCheck() + 25;
+      }
+      simpleStraight(25);
+
+      rightFlag = 1; // marking a right turn
+
+      wait(500);
+      turnLeft(13); // facing forward
+      wait(500);
+      if (obst2Flag == 0) // +y travel
+      {
+        simpleStraight(15);
+        depth1 = overcomeCheck() + 40;
+      }
+      else // obst 2
+      {
+        simpleStraight(15);
+        depth2 = overcomeCheck() + 40;
+      }
+      simpleStraight(25);
+      
+      wait(500);
+      // overcome the obstacle
+      turnLeft(13); // +x travel
+      wait(500);
+      if (obst2Flag == 0)
+      {
+        simpleStraight(width1);
+      }
+      else // obst 2
+      {
+        simpleStraight(width2);
+      }
+      wait(500);
+      turnRight(13); // back to m line
+      wait(700);
   }
-  else // now on obst 2
+  else // default left turn
   {
-    width2 = overcomeCheck() + 25;
+    //
+      if (obst2Flag == 0) // -x travel
+      {
+        width1 = overcomeCheck() + 25;  // forward 25 for fully passing (vehicle body length)
+      }
+      else // now on obst 2
+      {
+        width2 = overcomeCheck() + 25;
+      }
+      simpleStraight(25);
+      
+      wait(500);
+      turnRight(13); // facing forward
+      wait(500);
+      
+      if (obst2Flag == 0) // +y travel
+      {
+        simpleStraight(15); // forward 15 for fully engaging
+        depth1 += overcomeCheck() + 40; // 15 + 25 = 40
+      }
+      else // obst 2
+      {
+        simpleStraight(15);
+        depth2 += overcomeCheck() + 40;
+      }
+      simpleStraight(25);
+      
+      wait(500);
+      // overcome the obstacle
+      turnRight(13); // facing right +x travel
+
+      while (1) // front left back right
+      {
+        wait(300);
+        if (ultraSonic() < 20)
+        {
+          turnLeft(13); // facing forward
+          wait(300);
+          simpleStraight(15);
+          if (obst2Flag == 0) // +y travel
+          {
+            depth1 += 15;
+          }
+          else // obst 2
+          {
+            depth2 += 15;
+          }
+          wait(300);
+          turnRight(13);  // facing right
+          continue; //  check again
+        }
+        else
+        {
+          break;  // nothing blocking 
+        }
+      }
+      
+      wait(500);
+      if (obst2Flag == 0)
+      {
+        simpleStraight(width1);
+      }
+      else // obst 2
+      {
+        simpleStraight(width2);
+      }
+      wait(500);
+      turnLeft(13); // back to m line
+      wait(700);
+      //  while (1){};
   }
-  simpleStraight(25);
-  
-  wait(500);
-  turnRight(13); // facing forward
-  wait(500);
-  if (obst2Flag == 0) // +y travel
-  {
-    simpleStraight(15);
-    depth1 = overcomeCheck() + 40;
-  }
-  else // obst 2
-  {
-    simpleStraight(15);
-    depth2 = overcomeCheck() + 40;
-  }
-  simpleStraight(25);
-  
-  wait(500);
-  // overcome the obstacle
-  turnRight(13); // +x travel
-  wait(500);
-  if (obst2Flag == 0)
-  {
-    simpleStraight(width1);
-  }
-  else // obst 2
-  {
-    simpleStraight(width2);
-  }
-  wait(500);
-  turnLeft(13); // back to m line
-  wait(700);
-  //  while (1){};
 }
 
 float overcomeCheck ()
@@ -235,13 +384,15 @@ float driveStraight(long i)
   prevIR = refIR();
   refirFlag = 0;
 
+  int totalDistance = 0;
+
   float dist;
   unsigned long speedAdjCount = millis();
   unsigned long speedAdjInterval = 0;
   unsigned long refspeedAdjCount = millis();
   unsigned long refspeedAdjInterval = 0;
   
-  while (distance < i)
+  while ((distance += totalDistance) < i)
   {
       countDiff = LeftEncoderCount - RightEncoderCount;
       unsigned int input = (int) round (0.8 * countDiff);
@@ -250,38 +401,38 @@ float driveStraight(long i)
       if (speedAdjInterval > 50)
       {
         if (LeftEncoderCount > RightEncoderCount)
-      {
-        if (rightSpeed > 150)
         {
-          leftSpeed = leftSpeed - 2;
+          if (rightSpeed > 150)
+          {
+            leftSpeed = leftSpeed - 2;
+          }
+          else if (leftSpeed < 150)
+          {
+            rightSpeed = rightSpeed + 2;
+          }
+          else
+          {
+            leftSpeed = leftSpeed - 4;
+            rightSpeed = rightSpeed + 4;
+          }
+          
         }
-        else if (leftSpeed < 150)
+        if (LeftEncoderCount < RightEncoderCount)
         {
-          rightSpeed = rightSpeed + 2;
+          if (leftSpeed > 150)
+          {
+            rightSpeed = rightSpeed - 2;
+          }
+          else if (rightSpeed < 150)
+          {
+            leftSpeed = leftSpeed + 2;
+          }
+          else
+          {
+            rightSpeed = rightSpeed - 4;
+            leftSpeed = leftSpeed + 4;
+          }
         }
-        else
-        {
-          leftSpeed = leftSpeed - 4;
-          rightSpeed = rightSpeed + 4;
-        }
-        
-      }
-      if (LeftEncoderCount < RightEncoderCount)
-      {
-        if (leftSpeed > 150)
-        {
-          rightSpeed = rightSpeed - 2;
-        }
-        else if (rightSpeed < 150)
-        {
-          leftSpeed = leftSpeed + 2;
-        }
-        else
-        {
-          rightSpeed = rightSpeed - 4;
-          leftSpeed = leftSpeed + 4;
-        }
-      }
       //dist = ultraSonic();
       /*
       if (dist < 25)
@@ -318,7 +469,12 @@ float driveStraight(long i)
       Serial.print("\ndistance traveled: ");
       Serial.print(distance);
       Serial.print("\n");
-        
+
+      float printCheck = distance + totalDistance;
+      Serial.print("sum/toatlDistance: ");
+      Serial.print(printCheck);
+      Serial.print(" / ");
+      Serial.println(totalDistance);
         refirFlag = 1;
         speedAdjCount = millis();
         speedAdjInterval = 0;
@@ -363,7 +519,7 @@ float driveStraight(long i)
         leftSpeed = 141;
         right_motor.setSpeed(157);
         rightSpeed = 157;
-        distance = distanceTemp;
+        totalDistance += distanceTemp;
         distanceTemp = 0;
         LeftEncoderCount = 0;
         RightEncoderCount = 0;
@@ -389,7 +545,8 @@ float driveStraight(long i)
         }
       }
   }
-  return distance;
+  totalDistance += distance;
+  return totalDistance;
   //vStop = 0;
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -491,8 +648,8 @@ void turnRight(float turnR)
   left_motor.run(FORWARD);
   right_motor.run(BACKWARD);
   Serial.print("turn right");
-  left_motor.setSpeed(150);
-  right_motor.setSpeed(150);
+  left_motor.setSpeed(136);
+  right_motor.setSpeed(136);
   while (distance < turnR)
   {
     wait(20);
@@ -516,8 +673,8 @@ void turnLeft(float turnL)
   left_motor.run(BACKWARD);
   right_motor.run(FORWARD);
   Serial.print("turn left");
-  left_motor.setSpeed(150);
-  right_motor.setSpeed(150);
+  left_motor.setSpeed(136);
+  right_motor.setSpeed(136);
   while (distance < turnL)
   {
     wait(20);
@@ -664,22 +821,18 @@ int refIR()
       //Serial.print("  A3 diff: ");
       //Serial.print(cond)
       return avgTrans1;
-} // end refIR
+}
 
 float ultraSonic()
 {
   int ultraI = 0;
   float distSum = 0;
-  // tests the ultrasonic sensor 5 times, and averages the result to avoid noise
   for(ultraI = 0; ultraI < 5; ultraI ++)
   {
     digitalWrite(A4, LOW);
-    unsigned long startTime = micros();
-    while (micros()-startTime < 10){
-    }    digitalWrite(A4, HIGH);
-    startTime = micros();
-    while (micros()-startTime < 10){
-    }
+    delayMicroseconds(10);
+    digitalWrite(A4, HIGH);
+    delayMicroseconds(10);
     digitalWrite(A4, LOW);
     unsigned long duration = pulseIn(A5, HIGH);
     float ultraDist1 = (duration * 0.034) / 2;
@@ -689,25 +842,24 @@ float ultraSonic()
   Serial.print("\ndistance(cm): ");
   Serial.println(ultraDist);
   
+  //wait(20);
   return ultraDist;
-} // end ultraSonic
+}
 
 void countLEncoder(){ // interrupt function for left encoder
     LeftEncoderCount++;
-} //countLEncoder
+}
 
 void countREncoder(){ // interrupt function for right encoder
       RightEncoderCount++;
-} //end countREncoder
-
+}
 float getVoltage(int pin) {
   float voltage = 5.0 * analogRead(pin) / 1024;
   return voltage;
-} //end getVoltage
+}
 
-// a function to pause the program while still being non-blocking
 void wait(float w){
   unsigned long prevTime = millis();
   while (millis()- prevTime < w){}
   return;
-} //end wait
+}
