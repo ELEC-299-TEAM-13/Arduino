@@ -768,9 +768,9 @@ void finalSearch(){
   //turn vehicle to the left to position for square searching
   //Left is vehicle orientation of angle 0.
   turnLeft(turnL);
-  delay(500);
+  wait(500);
   check();
-  delay(500);
+  wait(500);
 
   for(sideLength = 10 ; sideLength < 31 ; sideLength += 10){
     //first check for the paper to be sure
@@ -831,9 +831,9 @@ void Square(int sideLength){
   Serial.print("Angle: ");
   Serial.println(angle);
   check();
-  delay(500);
+  wait(500);
   simpleStraight(halfLength);
-  delay(500);
+  wait(500);
 
   //RESET THE ANGLE FOR NEXT RUN THROUGH
   angle = 0;
@@ -848,7 +848,7 @@ void check(){
       if (readrir > 20){
        left_motor.setSpeed(0);
        right_motor.setSpeed(0);
-       delay(500);
+       wait(500);
        reposition();
      }
 } // end check
@@ -867,12 +867,12 @@ void turnAround(){
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
     if (distance > turnA)    break;
-    delay(10);
+    wait(10);
   }
   Serial.print("\n TURNED AROUND");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
-  delay(200);
+  wait(200);
 }
 
 void reposition(){
