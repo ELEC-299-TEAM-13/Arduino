@@ -100,7 +100,13 @@ void loop() {
     turnRight(turnR);
     wait(300);
     //while(1){};
-      float stepAside;  // the distance vehicle step aside before straveling back
+    
+    if (vStop == 0)
+    {
+      
+    }
+    
+  float stepAside;  // the distance vehicle step aside before straveling back
   float backward;   // distance need to travel back
   
   if (obst1Flag != 0) // obs1 presented
