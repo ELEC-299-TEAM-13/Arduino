@@ -885,10 +885,7 @@ void reposition(){
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
     Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
-    while(1){
-     
-    }
-    //goBack();
+    return;
   }
 
     if(angle == 90){
@@ -897,10 +894,7 @@ void reposition(){
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
     Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
-    while(1){
-      
-    }
-    //goBack();
+    return;
   }
 
   if(angle == 180){
@@ -909,10 +903,7 @@ void reposition(){
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
     Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
-    while(1){
-      
-    }
-    //goBack();
+    return;
   }
 
   //already pointed towards starting point
@@ -921,9 +912,7 @@ void reposition(){
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
     Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
-    while(1){
-  
-    }
+    return;
   }
 
 } //end reposition
