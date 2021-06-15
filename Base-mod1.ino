@@ -956,9 +956,13 @@ float ultraSonic()
   for(ultraI = 0; ultraI < 5; ultraI ++)
   {
     digitalWrite(A4, LOW);
-    delayMicroseconds(10);
+    unsigned long startTime = micros();
+    while (micros()-startTime < 10){
+    }
     digitalWrite(A4, HIGH);
-    delayMicroseconds(10);
+    unsigned long startTime = micros();
+    while (micros()-startTime < 10){
+    }
     digitalWrite(A4, LOW);
     unsigned long duration = pulseIn(A5, HIGH);
     float ultraDist1 = (duration * 0.034) / 2;
