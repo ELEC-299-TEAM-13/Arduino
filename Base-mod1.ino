@@ -100,13 +100,7 @@ void loop() {
     turnRight(turnR);
     wait(300);
     //while(1){};
-    
-    if (vStop == 0)
-    {
-      
-    }
-    
-  float stepAside;  // the distance vehicle step aside before straveling back
+      float stepAside;  // the distance vehicle step aside before straveling back
   float backward;   // distance need to travel back
   
   if (obst1Flag != 0) // obs1 presented
@@ -752,7 +746,177 @@ void startCheck()
     
 } // end startCheck
 
+//finalSearch can be moved later
 
+//this is the main function that will call the Square function
+//and increase the square size each time it is not successful.
+void finalSearch(){
+
+  //turn vehicle to the left to position for square searching
+  //Left is vehicle orientation of angle 0.
+  turnLeft(turnL);
+  delay(500);
+  check();
+  delay(500);
+
+  for(sideLength = 10 ; sideLength < 31 ; sideLength += 10){
+    //first check for the paper to be sure
+    check();
+    //then call on the Square function for a length of 10
+    Square(sideLength);
+    //check again for efficiency
+    check();
+    //increase sideLength variable and loop again 
+  }
+} // end final search function.
+
+//function does a square based on the sideLength variable given
+//to the function and checks for the paper at all times.
+void Square(int sideLength){
+
+  halfLength = sideLength/2; //this is needed for the half square length 
+                             //to start and finish the square.
+
+  Serial.print("Angle: ");
+  Serial.println(angle);
+  simpleStraight(halfLength); //check bottom IR while going straight in this function
+  delay(500);
+  
+  turnRight(turnR);
+  delay(500);
+  angle += right;
+  Serial.print("Angle: ");
+  Serial.println(angle);
+  check();
+  delay(500);
+  simpleStraight(sideLength);
+  delay(500);
+  
+  turnRight(turnR);
+  delay(500);
+  angle += right;
+  Serial.print("Angle: ");
+  Serial.println(angle);
+  check();
+  delay(500);
+  simpleStraight(sideLength);
+  delay(500);
+
+  turnRight(turnR);
+  delay(500);
+  angle += right;
+  Serial.print("Angle: ");
+  Serial.println(angle);
+  check();
+  delay(500);
+  simpleStraight(sideLength);
+  delay(500);
+
+  turnRight(turnR);
+  delay(500);
+  angle+= right;
+  Serial.print("Angle: ");
+  Serial.println(angle);
+  check();
+  delay(500);
+  simpleStraight(halfLength);
+  delay(500);
+
+  //RESET THE ANGLE FOR NEXT RUN THROUGH
+  angle = 0;
+  Serial.print("Angle: ");
+  Serial.println(angle);
+} // end Square function
+
+void check(){
+      int readrir = analogRead(A3);
+      Serial.print(" readRIR: ");
+      Serial.println(readrir);
+      if (readrir > 20){
+       left_motor.setSpeed(0);
+       right_motor.setSpeed(0);
+       delay(500);
+       reposition();
+     }
+} // end check
+
+//Simple turn right function that does a 180.
+void turnAround(){
+  Serial.print("Turn Around");
+  LeftEncoderCount = 0;
+  RightEncoderCount = 0;
+  left_motor.run(FORWARD);
+  right_motor.run(BACKWARD);
+  left_motor.setSpeed(155);
+  right_motor.setSpeed(145);
+  while (1)
+  {
+    averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+    distance = (averagePulse / 40) * 3.14 * 6.5;
+    if (distance > turnA)    break;
+    delay(10);
+  }
+  Serial.print("\n TURNED AROUND");
+  left_motor.setSpeed(0);
+  right_motor.setSpeed(0);
+  delay(200);
+}
+
+void reposition(){
+  Serial.println("REPOSITIONING");
+  
+  //reposition based on the angle and then call
+  //the goBack() function.
+  if(angle == 0 || angle == 360){
+    //need to turn 90 degrees left to point at starting point
+    turnLeft(turnL);
+    left_motor.setSpeed(0);
+    right_motor.setSpeed(0);
+    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    while(1){
+     
+    }
+    //goBack();
+  }
+
+    if(angle == 90){
+  //looking opposite direction of starting point must turn around
+    turnAround();
+    left_motor.setSpeed(0);
+    right_motor.setSpeed(0);
+    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    while(1){
+      
+    }
+    //goBack();
+  }
+
+  if(angle == 180){
+    //need to turn 90 degrees right to point at starting point
+    turnRight(turnR);
+    left_motor.setSpeed(0);
+    right_motor.setSpeed(0);
+    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    while(1){
+      
+    }
+    //goBack();
+  }
+
+  //already pointed towards starting point
+  if(angle == 270){
+    //goBack();
+    left_motor.setSpeed(0);
+    right_motor.setSpeed(0);
+    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    while(1){
+  
+    }
+  }
+
+} //end reposition
+
+//end of final search functions
 
 // SENSORS
 
@@ -823,3 +987,5 @@ void wait(float w){
   while (millis()- prevTime < w){}
   return;
 }
+
+
