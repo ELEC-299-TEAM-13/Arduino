@@ -9,8 +9,8 @@
 AF_DCMotor left_motor(1, MOTOR12_1KHZ);  // left motor to M1 on motor control board
 AF_DCMotor right_motor(3, MOTOR34_1KHZ); // right motor to M3 on motor control board
 
-int LeftEncoderCount = 0;
-int RightEncoderCount = 0;
+volatile int LeftEncoderCount = 0;
+volatile int RightEncoderCount = 0;
 int countDiff = 0;
 int delayTime = 200;
 
