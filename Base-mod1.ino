@@ -100,7 +100,7 @@ void loop() {
     turnRight(turnR);
     wait(300);
     //while(1){};
-      float stepAside;  // the distance vehicle step aside before straveling back
+  float stepAside;  // the distance vehicle step aside before straveling back
   float backward;   // distance need to travel back
   
   if (obst1Flag != 0) // obs1 presented
@@ -130,7 +130,19 @@ void loop() {
     backward = destination;
   }
   
-  if (rightFlag == 1)
+  if (vStop == 0) // search for the marker if not detected with in the indicated range
+  {
+    finalSearch();
+  }
+  wait(500); 
+  if (obst1Flag == 0) // did not encountered any obstacles
+  {
+    simpleStraight(backward);
+    vStop = 0;
+    break;
+  }
+   
+  if (rightFlag == 1) // special right case
   {
     simpleStraight(3);
     wait(300);
@@ -150,7 +162,7 @@ void loop() {
     wait(300);
     simpleStraight(3);
   }
-  else
+  else  // normal case
   {
     simpleStraight(3);
     wait(300);
