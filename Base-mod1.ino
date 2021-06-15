@@ -793,40 +793,40 @@ void Square(int sideLength){
   Serial.print("Angle: ");
   Serial.println(angle);
   simpleStraight(halfLength); //check bottom IR while going straight in this function
-  delay(500);
+  wait(500);
   
   turnRight(turnR);
-  delay(500);
+  wait(500);
   angle += right;
   Serial.print("Angle: ");
   Serial.println(angle);
   check();
-  delay(500);
+  wait(500);
   simpleStraight(sideLength);
-  delay(500);
+  wait(500);
   
   turnRight(turnR);
-  delay(500);
+  wait(500);
   angle += right;
   Serial.print("Angle: ");
   Serial.println(angle);
   check();
-  delay(500);
+  wait(500);
   simpleStraight(sideLength);
-  delay(500);
+  wait(500);
 
   turnRight(turnR);
-  delay(500);
+  wait(500);
   angle += right;
   Serial.print("Angle: ");
   Serial.println(angle);
   check();
-  delay(500);
+  wait(500);
   simpleStraight(sideLength);
-  delay(500);
+  wait(500);
 
   turnRight(turnR);
-  delay(500);
+  wait(500);
   angle+= right;
   Serial.print("Angle: ");
   Serial.println(angle);
