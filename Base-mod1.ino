@@ -16,13 +16,18 @@ int waitTime = 200;
 int LPWM=255;
 int RPWM=255;
 
-int leftSpeed;
+int leftSpeed = 141;
+int rightSpeed = 155;
 int rightSpeed;
 float averagePulse;
 float destDis;
 float distance;
 int prevIR;
 int vStop = 1;
+
+int turnL = 13;
+int turnR = 12;
+int turnA = 25;
 
 int avgTrans;
 int transItera;
@@ -96,7 +101,7 @@ void loop() {
     
     backUp(3);
     wait(300);
-    turnRight(33);
+    turnRight(turnR);
     wait(300);
     //while(1){};
       float stepAside;  // the distance vehicle step aside before straveling back
@@ -133,19 +138,19 @@ void loop() {
   {
     simpleStraight(3);
     wait(300);
-    turnLeft(13);
+    turnLeft(turnL);
     wait(300);
     simpleStraight(stepAside);
     wait(300);
-    turnRight(13);
+    turnRight(turnR);
     wait(300);
     simpleStraight(backward);
     wait(300);
-    turnRight(13);
+    turnRight(turnR);
     wait(300);
     simpleStraight(stepAside);
     wait(300);
-    turnLeft(13);
+    turnLeft(turnL);
     wait(300);
     simpleStraight(3);
   }
@@ -153,19 +158,19 @@ void loop() {
   {
     simpleStraight(3);
     wait(300);
-    turnRight(13);
+    turnRight(turnR);
     wait(300);
     simpleStraight(stepAside);
     wait(300);
-    turnLeft(13);
+    turnLeft(turnL);
     wait(300);
     simpleStraight(backward);
     wait(300);
-    turnLeft(13);
+    turnLeft(turnL);
     wait(300);
     simpleStraight(stepAside);
     wait(300);
-    turnRight(13);
+    turnRight(turnR);
     wait(300);
     simpleStraight(3);
   }
@@ -173,39 +178,17 @@ void loop() {
   }
   while (1){};
 }
-/*
-void ReactObstacles()
-{
-  //wait(100);
-  if (getVoltage(A0) < 1 && getVoltage(A1) < 1)
-  {
-    backUp(3);
-    turnRight(30);
-    return;
-  }
-  else if (getVoltage(A0) < 1) // left sensor
-  {
-    backUp(3);
-    turnRight(7);
-  }
-  else if (getVoltage(A1) < 1) // right sensor
-  {
-    backUp(3);
-    turnLeft(7);
-  }
-  return;
-}
-*/
+
 void avoidObstacles()
 {
   wait(200);
   backUp(3);
   wait(500);
-  turnLeft(13); // facing left
+  turnLeft(turnL); // facing left
   wait(500);
   if (ultraSonic() < 20)// obstacle on the left side blocking the left turn
   {
-    turnRight(33);  // facing to right
+    turnRight(turnR);  // facing to right
       if (obst2Flag == 0) // +x travel
       {
         width1 = overcomeCheck() + 25;  // forward 25 for fully passing (vehicle body length)
@@ -219,7 +202,7 @@ void avoidObstacles()
       rightFlag = 1; // marking a right turn
 
       wait(500);
-      turnLeft(13); // facing forward
+      turnLeft(turnL); // facing forward
       wait(500);
       if (obst2Flag == 0) // +y travel
       {
@@ -235,7 +218,7 @@ void avoidObstacles()
       
       wait(500);
       // overcome the obstacle
-      turnLeft(13); // +x travel
+      turnLeft(turnL); // +x travel
       wait(500);
       if (obst2Flag == 0)
       {
@@ -246,7 +229,7 @@ void avoidObstacles()
         simpleStraight(width2);
       }
       wait(500);
-      turnRight(13); // back to m line
+      turnRight(turnR); // back to m line
       wait(700);
   }
   else // default left turn
@@ -263,7 +246,7 @@ void avoidObstacles()
       simpleStraight(25);
       
       wait(500);
-      turnRight(13); // facing forward
+      turnRight(turnR); // facing forward
       wait(500);
       
       if (obst2Flag == 0) // +y travel
@@ -280,14 +263,14 @@ void avoidObstacles()
       
       wait(500);
       // overcome the obstacle
-      turnRight(13); // facing right +x travel
+      turnRight(turnR); // facing right +x travel
 
       while (1) // front left back right
       {
         wait(300);
         if (ultraSonic() < 20)
         {
-          turnLeft(13); // facing forward
+          turnLeft(turnL); // facing forward
           wait(300);
           simpleStraight(15);
           if (obst2Flag == 0) // +y travel
@@ -299,7 +282,7 @@ void avoidObstacles()
             depth2 += 15;
           }
           wait(300);
-          turnRight(13);  // facing right
+          turnRight(turnR);  // facing right
           continue; //  check again
         }
         else
@@ -318,7 +301,7 @@ void avoidObstacles()
         simpleStraight(width2);
       }
       wait(500);
-      turnLeft(13); // back to m line
+      turnLeft(turnL); // back to m line
       wait(700);
       //  while (1){};
   }
@@ -347,10 +330,8 @@ float simpleStraight(long sS)
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(FORWARD);
-  left_motor.setSpeed(139);
-  leftSpeed = 139;
-  right_motor.setSpeed(157);
-  rightSpeed = 157;
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   while(distance < sS)
   {
     wait(70);
@@ -377,10 +358,8 @@ float driveStraight(long i)
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(FORWARD);
-  left_motor.setSpeed(145);
-  leftSpeed = 145;
-  right_motor.setSpeed(155);
-  rightSpeed = 155;
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   prevIR = refIR();
   refirFlag = 0;
 
@@ -433,21 +412,6 @@ float driveStraight(long i)
             leftSpeed = leftSpeed + 4;
           }
         }
-      //dist = ultraSonic();
-      /*
-      if (dist < 25)
-      {
-        int leftLow = leftSpeed / 3 * 2;
-        int rightLow = rightSpeed / 3 * 2;
-        left_motor.setSpeed(leftLow);
-        right_motor.setSpeed(rightLow);
-      }
-      else
-      {
-        left_motor.setSpeed(leftSpeed);
-        right_motor.setSpeed(rightSpeed);
-      }
-      */
 
       left_motor.setSpeed(leftSpeed);
       right_motor.setSpeed(rightSpeed);
@@ -515,10 +479,8 @@ float driveStraight(long i)
         //break;
         left_motor.run(FORWARD);
         right_motor.run(FORWARD);
-        left_motor.setSpeed(141);
-        leftSpeed = 141;
-        right_motor.setSpeed(157);
-        rightSpeed = 157;
+        left_motor.setSpeed(leftSpeed);
+        right_motor.setSpeed(rightSpeed);
         totalDistance += distanceTemp;
         distanceTemp = 0;
         LeftEncoderCount = 0;
@@ -562,10 +524,8 @@ void backUp(long b)
   prevRightEncoderCount = 0;
   left_motor.run(BACKWARD);
   right_motor.run(BACKWARD);
-  left_motor.setSpeed(145);
-  leftSpeed = 145;
-  right_motor.setSpeed(155);
-  rightSpeed = 155;
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   prevIR = refIR();
   float backDistance;
   while (backDistance < b)
@@ -648,8 +608,8 @@ void turnRight(float turnR)
   left_motor.run(FORWARD);
   right_motor.run(BACKWARD);
   Serial.print("turn right");
-  left_motor.setSpeed(136);
-  right_motor.setSpeed(136);
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   while (distance < turnR)
   {
     wait(20);
@@ -673,8 +633,8 @@ void turnLeft(float turnL)
   left_motor.run(BACKWARD);
   right_motor.run(FORWARD);
   Serial.print("turn left");
-  left_motor.setSpeed(136);
-  right_motor.setSpeed(136);
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   while (distance < turnL)
   {
     wait(20);
