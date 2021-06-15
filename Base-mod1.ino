@@ -960,7 +960,7 @@ float ultraSonic()
     while (micros()-startTime < 10){
     }
     digitalWrite(A4, HIGH);
-    unsigned long startTime = micros();
+    startTime = micros();
     while (micros()-startTime < 10){
     }
     digitalWrite(A4, LOW);
