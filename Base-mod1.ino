@@ -21,8 +21,8 @@ int prevIR;
 int vStop = 1;
 
 int turnL = 13;
-int turnR = 12;
-int turnA = 25;
+int turnR = 13;
+int turnA = 33;
 
 int avgTrans;
 int transItera;
@@ -96,8 +96,7 @@ void loop() {
     
     backUp(3);
     wait(300);
-    turnRight(turnR);
-    wait(300);
+    
     //while(1){};
   float stepAside;  // the distance vehicle step aside before straveling back
   float backward;   // distance need to travel back
@@ -133,6 +132,14 @@ void loop() {
   {
     finalSearch();
   }
+  else
+  {
+    turnRight(turnR);
+    wait(200);
+    turnRight(turnR);
+    wait(300);
+  }
+    
   wait(500); 
   if (obst1Flag == 0) // did not encountered any obstacles
   {
@@ -195,7 +202,9 @@ void avoidObstacles()
   wait(500);
   if (ultraSonic() < 20)// obstacle on the left side blocking the left turn
   {
-    turnRight(turnR);  // facing to right
+    turnRight(turnR); // facing to right
+    wait(200);
+    turnRight(turnR);
       if (obst2Flag == 0) // +x travel
       {
         width1 = overcomeCheck() + 25;  // forward 25 for fully passing (vehicle body length)
