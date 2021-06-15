@@ -9,12 +9,8 @@ AF_DCMotor right_motor(3, MOTOR34_1KHZ); // right motor to M3 on motor control b
 
 int LeftEncoderCount = 0;
 int RightEncoderCount = 0;
-int prevLeftEncoderCount = 0;
-int prevRightEncoderCount = 0;
 int countDiff = 0;
 int waitTime = 200;
-int LPWM=255;
-int RPWM=255;
 
 int leftSpeed = 141;
 int rightSpeed = 155;
@@ -374,7 +370,6 @@ float driveStraight(long i)
   while ((distance += totalDistance) < i)
   {
       countDiff = LeftEncoderCount - RightEncoderCount;
-      unsigned int input = (int) round (0.8 * countDiff);
 
       speedAdjInterval = millis() - speedAdjCount;
       if (speedAdjInterval > 50)
@@ -532,7 +527,6 @@ void backUp(long b)
   {
      
       countDiff = LeftEncoderCount - RightEncoderCount;
-      int input = (int) round (0.2 * countDiff);
       
       if (LeftEncoderCount > RightEncoderCount)
       {
