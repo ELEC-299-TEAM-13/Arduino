@@ -355,8 +355,8 @@ float simpleStraight(long sS)
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(FORWARD);
-  left_motor.setSpeed(130);
-  right_motor.setSpeed(155);
+  left_motor.setSpeed(leftSpeed);
+  right_motor.setSpeed(rightSpeed);
   while(distance < sS)
   {
     wait(70);
