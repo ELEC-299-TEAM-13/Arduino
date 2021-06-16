@@ -14,37 +14,37 @@ int waitTime = 200;
 int leftSpeed = 125;
 int rightSpeed = 155;
 float averagePulse;
-float destDis;
-float distance;
-int prevIR;
+float destDis = 0;
+float distance = 0;
+int prevIR = 0;
 int vStop = 1;
 
 int turnL = 10;
 int turnR = 11;
 int turnA = 33;
 
-int avgTrans;
-int transItera;
-int cumTrans;
-int refirFlag;
+int avgTrans = 0;
+int transItera = 0;
+int cumTrans = 0;
+int refirFlag = 0;
 
-float width1; // x
-float depth1; // y
-float width2;
-float depth2;
-float obst1;    //distance from start to obatacle 1
-float obst2;    //distance between obstacle 1/2
-float destination;  //distance from obstacle 1/2 to destination
-int obst1Flag;    //1 for engaged obst 1
-int obst2Flag;    //1 for engaged obst 2
-int rightFlag;    //1 for special right turn
-int sideLength;
-int halfLength;
-int angle;
+float width1 = 0; // x
+float depth1 = 0; // y
+float width2 = 0;
+float depth2 = 0;
+float obst1 = 0;    //distance from start to obatacle 1
+float obst2 = 0;    //distance between obstacle 1/2
+float destination = 0;  //distance from obstacle 1/2 to destination
+int obst1Flag = 0;    //1 for engaged obst 1
+int obst2Flag = 0;    //1 for engaged obst 2
+int rightFlag = 0;    //1 for special right turn
+int sideLength = 0;
+int halfLength = 0;
+int angle = 0;
 int right = 90;
 int left = -90;
- float stepAside;  // the distance vehicle step aside before straveling back
-  float backward;   // distance need to travel back
+ float stepAside = 0;  // the distance vehicle step aside before straveling back
+  float backward = 0;   // distance need to travel back
 
 int TicksPerRot = 20;
 
