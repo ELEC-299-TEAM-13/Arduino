@@ -362,8 +362,8 @@ float simpleStraight(long sS)
     wait(70);
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
-    Serial.print("\nsimple forward: ");
-    Serial.print(distance);
+    //Serial.print("\nsimple forward: ");
+    //Serial.print(distance);
     check();
   }
   
@@ -390,8 +390,8 @@ float simpleStraight2(long sS)
     wait(70);
     averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
     distance = (averagePulse / 40) * 3.14 * 6.5;
-    Serial.print("\nsimple forward: ");
-    Serial.print(distance);
+    //Serial.print("\nsimple forward: ");
+    //Serial.print(distance);
   }
   
   left_motor.setSpeed(0);
@@ -466,13 +466,16 @@ float driveStraight(long i)
       left_motor.setSpeed(leftSpeed);
       right_motor.setSpeed(rightSpeed);
       
+      averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+      distance = (averagePulse / 40) * 3.14 * 6.5;
+      float printCheck = distance + totalDistance;
+       
+      /*
       Serial.print("\nleft speed: ");
       Serial.print(leftSpeed);
       Serial.print("  right speed: ");
       Serial.print(rightSpeed);
        
-      averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-      distance = (averagePulse / 40) * 3.14 * 6.5;
       Serial.print("\nLEncoder: ");
       Serial.print(LeftEncoderCount);
       Serial.print(", REncoder: ");
@@ -484,11 +487,11 @@ float driveStraight(long i)
       Serial.print(distance);
       Serial.print("\n");
 
-      float printCheck = distance + totalDistance;
       Serial.print("sum/toatlDistance: ");
       Serial.print(printCheck);
       Serial.print(" / ");
       Serial.println(totalDistance);
+      */
         refirFlag = 1;
         speedAdjCount = millis();
         speedAdjInterval = 0;
@@ -612,17 +615,17 @@ void backUp(long b)
         }
       }
       
-        left_motor.setSpeed(leftSpeed);
-        right_motor.setSpeed(rightSpeed);
+      left_motor.setSpeed(leftSpeed);
+      right_motor.setSpeed(rightSpeed);
       
-      
+      averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
+      backDistance = (averagePulse / 40) * 3.14 * 6.5;
+      /*
       Serial.print("\nleft speed: ");
       Serial.print(leftSpeed);
       Serial.print("  right speed: ");
       Serial.print(rightSpeed);
        
-      averagePulse = (LeftEncoderCount + RightEncoderCount) / 2;
-      backDistance = (averagePulse / 40) * 3.14 * 6.5;
       Serial.print("\nLEncoder: ");
       Serial.print(LeftEncoderCount);
       Serial.print(", REncoder: ");
@@ -633,6 +636,7 @@ void backUp(long b)
       Serial.print("\ndistance traveled back: ");
       Serial.print(backDistance);
       Serial.print("\n");
+      */
   }
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
@@ -649,7 +653,7 @@ void turnRight(float turnR)
   distance = 0;
   left_motor.run(FORWARD);
   right_motor.run(BACKWARD);
-  Serial.print("turn right");
+  //Serial.print("turn right");
   left_motor.setSpeed(leftSpeed);
   right_motor.setSpeed(rightSpeed);
   while (distance < turnR)
@@ -660,7 +664,7 @@ void turnRight(float turnR)
   }
   left_motor.run(RELEASE);
   right_motor.run(RELEASE);
-  Serial.print("\nEnd");
+  //Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
   wait(200); // wait for vehicle to become stable
@@ -674,7 +678,7 @@ void turnLeft(float turnL)
   distance = 0;
   left_motor.run(BACKWARD);
   right_motor.run(FORWARD);
-  Serial.print("turn left");
+  //Serial.print("turn left");
   left_motor.setSpeed(leftSpeed);
   right_motor.setSpeed(rightSpeed);
   while (distance < turnL)
@@ -685,7 +689,7 @@ void turnLeft(float turnL)
   }
   left_motor.run(RELEASE);
   right_motor.run(RELEASE);
-  Serial.print("\nEnd");
+  //Serial.print("\nEnd");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
   wait(200); // wait for vehicle to become stable
@@ -700,12 +704,12 @@ void startCheck()
   distance = 0;
   transItera = 0;
   //wait(50);
-  Serial.println("initialising sensors...");
-  Serial.print("checking IR obstacle sensor...");
+  //Serial.println("initialising sensors...");
+  //Serial.print("checking IR obstacle sensor...");
   while(1){if (getVoltage(A0) < 1 && getVoltage(A1) < 1)   break;} // IR obstacle check
-  Serial.println("\nDone");
+  //Serial.println("\nDone");
   wait(1000); // preperation before next sensor test
-  Serial.print("checking ultrasonic sensor...");
+  //Serial.print("checking ultrasonic sensor...");
   unsigned long ultraCT = millis();
   unsigned long ultraInterval = 0;
   while(1)
@@ -719,8 +723,8 @@ void startCheck()
     ultraInterval = millis() - ultraCT;
     //wait(1000);
   } // ultrasonic check
-  Serial.println("Done");
-  Serial.print("checking IR reflective sensor...\n");
+  //Serial.println("Done");
+  //Serial.print("checking IR reflective sensor...\n");
   unsigned long refIR = millis();
   unsigned long refInterval = 0;
   while(1)
@@ -733,8 +737,8 @@ void startCheck()
       transItera ++;
       avgTrans = cumTrans / transItera;
       int cond = currRead - avgTrans;
-      Serial.print(" TCRT5000L: ");
-      Serial.println(currRead);
+      //Serial.print(" TCRT5000L: ");
+      //Serial.println(currRead);
       if (cond > 10)
       {
         cumTrans = 0;
@@ -748,15 +752,15 @@ void startCheck()
     }
     refInterval = millis() - refIR;
   }
-  Serial.println("\nDone");
-  Serial.print("checking left encoder...\n");
+  //Serial.println("\nDone");
+  //Serial.print("checking left encoder...\n");
   unsigned long leftCT = millis();
   unsigned long leftInterval = 0;
   while(1)
   {
     if (leftInterval > 500)
     {
-      Serial.println(LeftEncoderCount);
+      //Serial.println(LeftEncoderCount);
       if (LeftEncoderCount > 50)
       {
         LeftEncoderCount = 0;
@@ -767,8 +771,8 @@ void startCheck()
     }
     leftInterval = millis() - leftCT;
   }
-  Serial.println("\nDone");
-  Serial.print("checking right encoder...\n");
+  //Serial.println("\nDone");
+  //Serial.print("checking right encoder...\n");
   //Serial.println(RightEncoderCount);
   RightEncoderCount = 0;
   unsigned long rightCT = millis();
@@ -778,7 +782,7 @@ void startCheck()
     //wait(1000);
     if (rightInterval > 500)
     {
-      Serial.println(RightEncoderCount);
+      //Serial.println(RightEncoderCount);
       if (RightEncoderCount > 50)
       {
         RightEncoderCount = 0;
@@ -789,7 +793,7 @@ void startCheck()
     }
     rightInterval = millis() - rightCT;
   }
-  Serial.println(" \nDone\nsystemcheck completed");
+  //Serial.println(" \nDone\nsystemcheck completed");
   return;
     
 } // end startCheck
@@ -825,16 +829,16 @@ void Square(int sideLength){
   halfLength = sideLength/2; //this is needed for the half square length 
                              //to start and finish the square.
 
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
   simpleStraight(halfLength); //check bottom IR while going straight in this function
   delay(500);
   
   turnRight(turnR);
   delay(500);
   angle += right;
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
   check();
   delay(500);
   simpleStraight(sideLength);
@@ -843,8 +847,8 @@ void Square(int sideLength){
   turnRight(turnR);
   delay(500);
   angle += right;
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
   check();
   delay(500);
   simpleStraight(sideLength);
@@ -853,8 +857,8 @@ void Square(int sideLength){
   turnRight(turnR);
   delay(500);
   angle += right;
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
   check();
   delay(500);
   simpleStraight(sideLength);
@@ -863,8 +867,8 @@ void Square(int sideLength){
   turnRight(turnR);
   delay(500);
   angle+= right;
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
   check();
   delay(500);
   simpleStraight(halfLength);
@@ -872,14 +876,14 @@ void Square(int sideLength){
 
   //RESET THE ANGLE FOR NEXT RUN THROUGH
   angle = 0;
-  Serial.print("Angle: ");
-  Serial.println(angle);
+  //Serial.print("Angle: ");
+  //Serial.println(angle);
 } // end Square function
 
 void check(){
       int readrir = analogRead(A3);
-      Serial.print(" readRIR: ");
-      Serial.println(readrir);
+      //Serial.print(" readRIR: ");
+      //Serial.println(readrir);
       if (readrir > 25){
        left_motor.setSpeed(0);
        right_motor.setSpeed(0);
@@ -890,7 +894,7 @@ void check(){
 
 //Simple turn right function that does a 180.
 void turnAround(){
-  Serial.print("Turn Around");
+  //Serial.print("Turn Around");
   LeftEncoderCount = 0;
   RightEncoderCount = 0;
   left_motor.run(FORWARD);
@@ -904,14 +908,14 @@ void turnAround(){
     if (distance > turnA)    break;
     delay(10);
   }
-  Serial.print("\n TURNED AROUND");
+  //Serial.print("\n TURNED AROUND");
   left_motor.setSpeed(0);
   right_motor.setSpeed(0);
   delay(200);
 }
 
 void reposition(){
-  Serial.println("REPOSITIONING");
+  //Serial.println("REPOSITIONING");
   
   //reposition based on the angle and then call
   //the goBack() function.
@@ -920,7 +924,7 @@ void reposition(){
     turnLeft(turnL);
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
-    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    //Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
     goBack();
   }
 
@@ -929,7 +933,7 @@ void reposition(){
     turnAround();
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
-    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    //Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
     goBack();
   }
 
@@ -938,7 +942,7 @@ void reposition(){
     turnRight(turnR);
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
-    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    //Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
     goBack();
   }
 
@@ -947,7 +951,7 @@ void reposition(){
     //goBack();
     left_motor.setSpeed(0);
     right_motor.setSpeed(0);
-    Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
+    //Serial.println("POINTING TOWARDS STARTING POINT CALL RETURN FUNCTION");
     goBack();
   }
 
@@ -974,11 +978,11 @@ int refIR()
   }
   avgTrans1 = cumTrans1 / 3;
       currRead1 = analogRead(A3);
-      Serial.print("\nTCRT5000L: ");
+      //Serial.print("\nTCRT5000L: ");
       //Serial.print(currRead);
       //int cond = currRead - avgTrans;
       //Serial.print("  avg: ");
-      Serial.println(avgTrans1);
+      //Serial.println(avgTrans1);
       //Serial.print("  A3 diff: ");
       //Serial.print(cond)
       return avgTrans1;
@@ -1000,8 +1004,8 @@ float ultraSonic()
     distSum += ultraDist1;
   }
   float ultraDist = distSum / 5;
-  Serial.print("\ndistance(cm): ");
-  Serial.println(ultraDist);
+  //Serial.print("\ndistance(cm): ");
+  //Serial.println(ultraDist);
   
   //wait(20);
   return ultraDist;
